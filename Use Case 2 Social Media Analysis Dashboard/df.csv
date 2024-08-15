@@ -1,0 +1,8 @@
+,tweet_id,airline,name,text,tweet_coord,tweet_created,tweet_location,user_timezone,SentimentVal
+0,5675880,Delta,JetBlueNews,@JetBlue's new CEO seeks the right balance to please passengers and Wall ... - Greenfield Daily Reporter http://t.co/LM3opxkxch,"[None, None]",16-02-15 23:36,USA,Sydney,NEUTRAL
+1,5675881,Delta,nesi_1992,@JetBlue is REALLY getting on my nerves !! 😡😡 #nothappy,"[None, None]",16-02-15 23:43,undecided,Pacific Time (US & Canada),NEGATIVE
+2,5675882,United,CPoutloud,@united yes. We waited in line for almost an hour to do so. Some passengers just left not wanting to wait past 1am.,"[None, None]",16-02-15 23:48,"Washington, DC",,NEUTRAL
+3,5675883,United,brenduch,"@united the we got into the gate at IAH on time and have given our seats and closed the flight. If you know people is arriving, have to wait","[None, None]",16-02-15 23:52,,Buenos Aires,NEUTRAL
+4,5675884,Southwest,VahidESQ,"@SouthwestAir its cool that my bags take a bit longer, dont give me baggage blue balls-turn the carousel on, tell me it's coming, then not.","[None, None]",17-02-15 0:00,"Los Angeles, CA",Pacific Time (US & Canada),POSITIVE
+5,5675885,United,brenduch,"@united and don't hope for me having a nicer flight some other time, try to do things right. You sold me those tickets with that connetion","[None, None]",17-02-15 0:01,,Buenos Aires,NEGATIVE
+6,5675886,United,CRomerDome,@united I like delays less than you because I'm the one on the plane. Connect me with a voucher,"[None, None]",17-02-15 0:05,"Portland, OR",Pacific Time (US & Canada),NEUTRAL

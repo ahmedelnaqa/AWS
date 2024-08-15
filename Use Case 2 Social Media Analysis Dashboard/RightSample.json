@@ -1,0 +1,93 @@
+[
+ {
+   "tweet_id": 5675880,
+   "airline": "Delta",
+   "name": "JetBlueNews",
+   "text": "@JetBlue's new CEO seeks the right balance to please passengers and Wall ... - Greenfield Daily Reporter http://t.co/LM3opxkxch",
+   "tweet_coord": [
+      null,
+      null
+   ],
+   "tweet_created": "16-02-15 23:36",
+   "tweet_location": "USA",
+   "user_timezone": "Sydney"
+},
+ {
+   "tweet_id": 5675881,
+   "airline": "Delta",
+   "name": "nesi_1992",
+   "text": "@JetBlue is REALLY getting on my nerves !! 😡😡 #nothappy",
+   "tweet_coord": [
+      null,
+      null
+   ],
+   "tweet_created": "16-02-15 23:43",
+   "tweet_location": "undecided",
+   "user_timezone": "Pacific Time (US & Canada)"
+},
+ {
+   "tweet_id": 5675882,
+   "airline": "United",
+   "name": "CPoutloud",
+   "text": "@united yes. We waited in line for almost an hour to do so. Some passengers just left not wanting to wait past 1am.",
+   "tweet_coord": [
+      null,
+      null
+   ],
+   "tweet_created": "16-02-15 23:48",
+   "tweet_location": "Washington, DC",
+   "user_timezone": ""
+},
+ {
+   "tweet_id": 5675883,
+   "airline": "United",
+   "name": "brenduch",
+   "text": "@united the we got into the gate at IAH on time and have given our seats and closed the flight. If you know people is arriving, have to wait",
+   "tweet_coord": [
+      null,
+      null
+   ],
+   "tweet_created": "16-02-15 23:52",
+   "tweet_location": "",
+   "user_timezone": "Buenos Aires"
+},
+ {
+   "tweet_id": 5675884,
+   "airline": "Southwest",
+   "name": "VahidESQ",
+   "text": "@SouthwestAir its cool that my bags take a bit longer, dont give me baggage blue balls-turn the carousel on, tell me it's coming, then not.",
+   "tweet_coord": [
+      null,
+      null
+   ],
+   "tweet_created": "17-02-15 0:00",
+   "tweet_location": "Los Angeles, CA",
+   "user_timezone": "Pacific Time (US & Canada)"
+},
+ {
+   "tweet_id": 5675885,
+   "airline": "United",
+   "name": "brenduch",
+   "text": "@united and don't hope for me having a nicer flight some other time, try to do things right. You sold me those tickets with that connetion",
+   "tweet_coord": [
+      null,
+      null
+   ],
+   "tweet_created": "17-02-15 0:01",
+   "tweet_location": "",
+   "user_timezone": "Buenos Aires"
+},
+ {
+   "tweet_id": 5675886,
+   "airline": "United",
+   "name": "CRomerDome",
+   "text": "@united I like delays less than you because I'm the one on the plane. Connect me with a voucher",
+   "tweet_coord": [
+      null,
+      null
+   ],
+   "tweet_created": "17-02-15 0:05",
+   "tweet_location": "Portland, OR",
+   "user_timezone": "Pacific Time (US & Canada)"
+}
+]

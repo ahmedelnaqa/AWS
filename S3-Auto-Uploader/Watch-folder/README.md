@@ -1,29 +1,27 @@
-Here’s a **single `README.md`** file you can copy and paste directly into your GitHub repository. It contains **everything** – description, installation steps, the full script, code explanation, and usage instructions – so you only need to copy once.
-
 ```markdown
 # S3 Auto Uploader through watch folder
 
-A production‑ready Bash script that **watches a local folder** for new CSV files and **automatically uploads them to an S3 bucket** using the AWS CLI.  
+A production‑ready Bash script that watches a local folder for new CSV files and automatically uploads them to an S3 bucket using the AWS CLI.  
 Designed to run 24/7 as a Linux systemd service.
 
 ---
 
 ## Features
 
-- **Instant detection** – uses `inotifywait` (from `inotify-tools`) to react immediately when a file is closed after writing.
-- **Checksum‑based dedup** – files with the same name but **different content** are re‑uploaded; identical files are skipped.
-- **Atomic locking** – prevents race conditions when multiple `inotify` events fire for the same file.
-- **Clean audit log** – `upload_log.txt` records every upload and skip event with timestamps and MD5 checksums.
-- **Auto‑organisation** – uploaded files move to `uploaded/`, duplicates move to `duplicated/`.
-- **Systemd service example** included.
+- Instant detection – uses `inotifywait` (from `inotify-tools`) to react immediately when a file is closed after writing.
+- Checksum‑based dedup – files with the same name but different content are re‑uploaded; identical files are skipped.
+- Atomic locking – prevents race conditions when multiple `inotify` events fire for the same file.
+- Clean audit log – `upload_log.txt` records every upload and skip event with timestamps and MD5 checksums.
+- Auto‑organisation – uploaded files move to `uploaded/`, duplicates move to `duplicated/`.
+- Systemd service example included.
 
 ---
 
 ## Requirements
 
-- **Linux** (tested on Linux Mint 22)
+- Linux (tested on Linux Mint 22)
 - `inotify-tools` (provides `inotifywait`)
-- **AWS CLI v2** installed and configured
+- AWS CLI v2 installed and configured
 - An S3 bucket with write permissions
 
 ---
@@ -58,7 +56,7 @@ Provide your `AWS Access Key ID`, `Secret Access Key`, default region (e.g., `us
 git clone https://github.com/YOUR_USERNAME/s3-auto-uploader.git
 cd s3-auto-uploader
 ```
-If you only need the script, simply create a file `s3_sync.sh` and copy the code from the **Full Script** section below.
+If you only need the script, simply create a file `s3_sync.sh` and copy the code from the Full Script section below.
 
 ### 5. Edit script variables
 Open `s3_sync.sh` and adjust these lines to match your setup:
@@ -218,37 +216,37 @@ done
 
 ## Code Explanation
 
-- **`set -euo pipefail`**  
+- `set -euo pipefail`  
   Makes the script exit immediately on any error, unset variable, or pipeline failure – essential for reliability.
 
-- **Variables**  
+- Variables  
   All configurable paths and the S3 bucket are defined at the top for easy modification.
 
-- **Setup**  
+- Setup  
   Creates the `uploaded/`, `duplicated/`, and `.locks/` directories if they don’t exist. Also creates an empty log file.
 
-- **`inotifywait` loop**  
+- `inotifywait` loop  
   The script monitors the watch directory forever (`-m`). It triggers on two events:
   - `close_write` – a file was written and closed
   - `moved_to` – a file was moved/renamed into the folder  
   For each filename printed, the loop processes it.
 
-- **Ignoring internal files**  
+- Ignoring internal files  
   The script immediately skips its own log file and created folders to avoid self‑processing.
 
-- **Atomic locking**  
+- Atomic locking  
   `mkdir` on a lock directory is atomic. If the lock already exists, another event is already handling that file – the current event skips. After processing, the lock is removed.
 
-- **Checksum calculation**  
+- Checksum calculation  
   `md5sum` computes a unique fingerprint of the file content. This is used to differentiate files with identical names but different data.
 
-- **Duplicate check**  
+- Duplicate check  
   The script searches the log file for the exact combination of filename and checksum. If found, the file is considered a duplicate, a “Skipped” entry is logged, and the file is moved to `duplicated/`. If not found, it’s uploaded.
 
-- **Upload to S3**  
+- Upload to S3  
   The AWS CLI copies the file with server‑side KMS encryption (`--sse aws:kms`). On success, a “Uploaded” entry is logged and the file moves to `uploaded/`. On failure, the file stays in place for later retry.
 
-- **Log format**  
+- Log format  
   Each line contains: `timestamp filename checksum Status`  
   Example:  
   `2026-07-09 12:24:31 sales.csv d41d8cd98f00b204e9800998ecf8427e Uploaded`

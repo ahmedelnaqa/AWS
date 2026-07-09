@@ -38,10 +38,8 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 📁 Folder Structure (on your machine)
-text
 /home/samir/data/                ← the watched folder
 ├── uploaded/                    ← successfully uploaded files
 ├── duplicated/                  ← duplicates (same content already in S3)
 ├── upload_log.txt               ← plain‑text event log
 └── .locks/                      ← temporary lock directories (atomic)
-The script creates these folders automatically.

@@ -281,4 +281,3 @@ MIT – use freely, modify, and share.
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 ```
 
-Copy the entire block above and save it as `README.md` in your GitHub repository. The script itself is included inside the markdown (under “Full Script”), so users can copy it out and save it as `s3_sync.sh`. Everything is self‑contained – no extra files needed.

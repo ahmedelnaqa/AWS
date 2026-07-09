@@ -19,9 +19,9 @@ Designed to run 24/7 as a Linux systemd service.
 
 ## Requirements
 
-- Linux (tested on Linux Mint 22)
+- Linux
 - `inotify-tools` (provides `inotifywait`)
-- AWS CLI v2 installed and configured
+- AWS CLI v2 installed and configured with access & secret keys 
 - An S3 bucket with write permissions
 
 ---
@@ -49,28 +49,24 @@ aws --version
 ```bash
 aws configure
 ```
-Provide your `AWS Access Key ID`, `Secret Access Key`, default region (e.g., `us-east-1`), and output format (`json`).
+Provide your `AWS Access Key ID`, `Secret Access Key`, region (e.g., `us-east-1`)
 
-### 4. Clone this repository (optional)
-```bash
-git clone https://github.com/YOUR_USERNAME/s3-auto-uploader.git
-cd s3-auto-uploader
-```
+### 4. The Script
 If you only need the script, simply create a file `s3_sync.sh` and copy the code from the Full Script section below.
 
 ### 5. Edit script variables
 Open `s3_sync.sh` and adjust these lines to match your setup:
 ```bash
-WATCH_DIR="/home/samir/data"      # the folder you want to watch
+WATCH_DIR="/home/(USER_NAME)/data"      # the folder you want to watch
 S3_BUCKET="s3://your-bucket-name" # your S3 bucket URL
 ```
 
 ---
 
-## Folder Structure (created automatically)
+## Folder Structure (created automatically though script)
 
 ```
-/home/samir/data/                  ← the watched folder
+/home/(USER_NAME)/data/            ← the watched folder
 ├── uploaded/                      ← successfully uploaded files
 ├── duplicated/                    ← duplicates (same content already in S3)
 ├── upload_log.txt                 ← plain‑text event log
@@ -88,7 +84,7 @@ chmod 700 s3_sync.sh
 ```
 Open another terminal and drop a test file:
 ```bash
-cp somefile.csv /home/samir/data/
+cp somefile.csv /home/(USER_NAME)/data/
 ```
 Check the terminal running the script – you should see upload confirmation.
 
@@ -107,14 +103,14 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/home/samir/s3_sync.sh
+ExecStart=/home/(USER_NAME)/s3_sync.sh
 Restart=always
 RestartSec=5
-User=samir
+User=(USER_NAME)
 NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/home/samir/data
+ReadWritePaths=/home/(USER_NAME)/data
 PrivateTmp=true
 
 [Install]
@@ -144,7 +140,7 @@ set -euo pipefail
 # ============================================================
 # VARIABLES – CHANGE THESE TO MATCH YOUR ENVIRONMENT
 # ============================================================
-WATCH_DIR="/home/samir/data"      # folder to watch
+WATCH_DIR="/home/(USER_NAME)/data"      # folder to watch
 S3_BUCKET="s3://your-bucket-name" # destination S3 bucket
 PROCESSED_DIR="$WATCH_DIR/uploaded"
 DUPLICATED_DIR="$WATCH_DIR/duplicated"
@@ -257,19 +253,19 @@ done
 
 ```bash
 # First copy – uploads and moves to uploaded/
-cp file.csv /home/samir/data/
+cp file.csv /home/(USER_NAME)/data/
 
 # Same file again – skipped and moved to duplicated/
-cp file.csv /home/samir/data/
+cp file.csv /home/(USER_NAME)/data/
 
 # Modify file content, then copy – re‑uploaded (new checksum)
 echo "new row" >> file.csv
-cp file.csv /home/samir/data/
+cp file.csv /home/(USER_NAME)/data/
 ```
 
 Check the log:
 ```bash
-cat /home/samir/data/upload_log.txt
+cat /home/(USER_NAME)/data/upload_log.txt
 ```
 
 ---

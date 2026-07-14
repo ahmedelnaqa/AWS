@@ -57,7 +57,7 @@ The flow:
 
 #### 1. Verify virtualisation support
 
-```bash
+bash
 sudo apt install cpu-checker -y
 kvm-ok
 Expected output: INFO: /dev/kvm exists – KVM acceleration can be used

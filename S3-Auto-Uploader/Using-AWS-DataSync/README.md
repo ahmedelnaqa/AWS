@@ -1,9 +1,6 @@
-You can copy and paste the entire block directly into a new README.md on GitHub.
+# On‑Premises to AWS S3 with DataSync (KVM Agent)
 
-markdown
-# On‑Premises to AWS S3 with DataSync (KVM Agent on Linux Mint)
-
-This project demonstrates how to automatically sync files from a local Linux Mint folder to an Amazon S3 bucket using **AWS DataSync** with a self‑deployed agent virtual machine running on **KVM**.
+This project demonstrates how to automatically sync files from a local Linux  folder to an Amazon S3 bucket using **AWS DataSync** with a self‑deployed agent virtual machine running on **KVM**.
 
 The setup is ideal for development, training, or small‑scale data pipelines where you want to evaluate DataSync without needing a dedicated VMware ESXi or Hyper‑V server.
 
@@ -14,8 +11,8 @@ The setup is ideal for development, training, or small‑scale data pipelines wh
 When deploying the AWS DataSync agent on your own hardware, AWS provides three image formats:
 
 - **VMware ESXi** (`.ova`) – requires a paid vSphere license and a dedicated server  
-- **Microsoft Hyper‑V** – Windows‑only, not available on Linux Mint  
-- **KVM** (`.qcow2`) – native to Linux, free, lightweight, and fully supported on Linux Mint
+- **Microsoft Hyper‑V** – Windows‑only, not available on Linux   
+- **KVM** (`.qcow2`) – native to Linux, free, lightweight, and fully supported on Linux 
 
 **KVM (Kernel‑based Virtual Machine)** is built directly into the Linux kernel and turns your machine into a bare‑metal hypervisor. It’s perfect for a local lab because:
 
@@ -24,13 +21,13 @@ When deploying the AWS DataSync agent on your own hardware, AWS provides three i
 - Easy management via `virt-manager` (GUI) or `virsh` (CLI)
 - The DataSync agent requirements (4 vCPUs, 8 GB RAM) are within reach of a modern laptop
 
-If you later move to production, you can reuse the exact same agent image on a dedicated KVM server.
+###**If you later move to production, you can reuse the exact same agent image on a dedicated KVM server.**
 
 ---
 
 ## Project Architecture
-[ Linux Mint Host ]
-├── /home/samir/data/ ← folder to watch (NFS exported)
+[ Linux  Host ]
+├── /home/(user_name)/data/ ← folder to watch (NFS exported)
 ├── KVM Virtual Machine (DataSync agent)
 │ └── agent connects to NFS share
 └── AWS DataSync task copies from NFS → S3 bucket
@@ -38,7 +35,7 @@ If you later move to production, you can reuse the exact same agent image on a d
 text
 
 The flow:
-1. Files are placed into `/home/samir/data/` on the host.
+1. Files are placed into `/home/(user_name)/data/` on the host.
 2. The DataSync agent (running in the KVM VM) mounts this folder via NFS.
 3. A DataSync task reads the NFS source and transfers new/changed files to S3.
 4. The task can be triggered manually or by a local cron job (every 2 minutes).
@@ -47,7 +44,7 @@ The flow:
 
 ## Prerequisites
 
-- **Linux Mint 22** (any recent version with KVM support)
+- **Linux** (any recent version with KVM support)
 - **AMD‑V / Intel VT‑x enabled** in BIOS (check with `kvm-ok`)
 - At least **12 GB free RAM** (8 GB for the agent + 4 GB for the OS)
 - An **AWS account** with permissions to create DataSync resources and write to an S3 bucket
@@ -58,7 +55,7 @@ The flow:
 
 ## Step‑by‑Step Guide
 
-### 1. Verify virtualisation support
+#### 1. Verify virtualisation support
 
 ```bash
 sudo apt install cpu-checker -y
@@ -67,7 +64,7 @@ Expected output: INFO: /dev/kvm exists – KVM acceleration can be used
 
 If it says not available, reboot into BIOS/UEFI and enable AMD‑V or VT‑x.
 
-2. Install KVM, libvirt, and virt‑manager
+#### 2. Install KVM, libvirt, and virt‑manager
 bash
 sudo apt update
 sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients virt-manager -y
@@ -77,7 +74,7 @@ bash
 sudo adduser $USER libvirt
 Log out and log back in (or reboot) for the group change to take effect.
 
-3. Download the DataSync agent image
+#### 3. Download the DataSync agent image
 Go to the AWS DataSync agent download page (change region if needed).
 Under “Download the Enhanced mode image and deploy on your on‑premises KVM hypervisor” , download the .qcow2 file.
 
@@ -85,7 +82,7 @@ Move the downloaded file to libvirt’s default image folder:
 
 bash
 sudo cp ~/Downloads/aws-datasync-*.x86_64.xfs.gpt.qcow2 /var/lib/libvirt/images/
-4. Create the DataSync agent VM
+#### 4. Create the DataSync agent VM
 Launch Virtual Machine Manager:
 
 bash
@@ -110,7 +107,7 @@ CPU model = host-passthrough (recommended for AMD Ryzen)
 
 Click Begin Installation (the VM will boot immediately)
 
-5. Find the agent’s IP address
+#### 5. Find the agent’s IP address
 Once the VM boots, its console will show a menu. Look for the line:
 
 text
@@ -120,8 +117,8 @@ Alternatively, from the host terminal:
 
 bash
 sudo virsh net-dhcp-leases default
-6. Activate the agent
-Open a web browser on your Linux Mint host and go to:
+#### 6. Activate the agent
+Open a web browser on your Linux  host and go to:
 
 text
 http://<agent-IP>/
@@ -139,16 +136,16 @@ Copy the key and paste it into the agent’s web interface
 
 Complete the activation; the agent will appear as Online in the console
 
-7. Share the local folder via NFS
+#### 7. Share the local folder via NFS
 The agent VM cannot see your host’s files directly – it must access them over the network.
-We’ll set up an NFS server on Linux Mint.
+We’ll set up an NFS server on Linux .
 
 bash
 sudo apt install nfs-kernel-server -y
-mkdir -p /home/samir/data
+mkdir -p /home/(user_name)/data
 
 # Add export entry for the VM subnet
-echo "/home/samir/data 192.168.122.0/24(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /etc/exports
+echo "/home/(user_name)/data 192.168.122.0/24(rw,sync,no_subtree_check,no_root_squash)" | sudo tee -a /etc/exports
 
 # Apply the export and restart the NFS service
 sudo exportfs -ra
@@ -157,9 +154,9 @@ Verify with:
 
 bash
 sudo exportfs -v
-You should see the /home/samir/data export.
+You should see the /home/(user_name)/data export.
 
-8. Create DataSync source and destination locations
+#### 8. Create DataSync source and destination locations
 Source (NFS)
 In the DataSync console → Locations → Create location → Network File System (NFS):
 
@@ -167,7 +164,7 @@ Agent: select your online agent
 
 NFS Server: 192.168.122.1 (the host’s IP on the virtual network)
 
-Mount Path: /home/samir/data
+Mount Path: /home/(user_name)/data
 
 Click Create location
 
@@ -180,7 +177,7 @@ IAM role: let DataSync create a default role (or use an existing one with write 
 
 Click Create location
 
-9. Create and run a DataSync task
+#### 9. Create and run a DataSync task
 Go to Tasks → Create task:
 
 Source: your NFS location
@@ -195,7 +192,7 @@ Click Create
 
 To run the task immediately: click Start → Run once.
 
-10. Monitor the task
+#### 10. Monitor the task
 You can monitor the execution in several ways:
 
 AWS Console: Task execution history shows progress, bytes transferred, and any errors.
@@ -208,22 +205,11 @@ AWS CLI (to check status):
 
 bash
 aws datasync list-task-executions --task-arn arn:aws:datasync:... --max-results 1
-11. (Optional) Schedule the task every 2 minutes
+#### 11. (Optional) Schedule the task every 2 minutes
 AWS DataSync’s built‑in scheduler has a minimum interval of 1 hour.
-To trigger the task every 2 minutes, use a local cron job.
 
-Add a cron entry on your Linux Mint host:
 
-bash
-crontab -e
-Insert this line (replace with your actual task ARN):
-
-text
-*/2 * * * * /usr/local/bin/aws datasync start-task-execution --task-arn arn:aws:datasync:ap-southeast-4:123456789012:task/task-xxxxxxxxx >> /tmp/datasync-cron.log 2>&1
-This calls the AWS CLI every 2 minutes, starting a new task execution.
-Be aware that frequent executions may incur small per‑call costs; check the DataSync pricing page.
-
-Cost Estimation
+### Cost Estimation
 DataSync: $0.015 per GB transferred (ap‑southeast‑4)
 
 S3 storage: standard S3 rates apply (e.g., $0.023/GB/month)
@@ -233,7 +219,7 @@ KVM agent: no cost for the agent itself; only your local electricity 😄
 For a small dataset of a few hundred MBs, the monthly cost remains negligible.
 
 Alternative Lightweight Approach (inotify + AWS CLI)
-If you do not need the full DataSync service and want a completely free, real‑time watcher, check out the companion script s3_sync.sh in this repository. It monitors a local folder and uses aws s3 cp immediately when a file is closed.
+If you do not need the full DataSync service and want a completely free, real‑time watcher -- > https://github.com/ahmedelnaqa/AWS/tree/main/S3-Auto-Uploader/Watch-folder , check out the companion script s3_sync.sh in this repository. It monitors a local folder and uses aws s3 cp immediately when a file is closed.
 See s3_sync.sh for details.
 
 Clean Up
@@ -245,7 +231,7 @@ sudo virsh destroy datasync-agent
 sudo virsh undefine datasync-agent
 
 # Remove the NFS export
-sudo sed -i '/\/home\/samir\/data/d' /etc/exports
+sudo sed -i '/\/home\/(user_name)\/data/d' /etc/exports
 sudo exportfs -ra
 
 # Delete the DataSync agent and task from the AWS console
@@ -264,22 +250,3 @@ MIT – use freely, adapt for your own pipelines.
 text
 
 ---
-
-## How to publish this on GitHub
-
-1. **Create a new repository** on GitHub (no README, no .gitignore).  
-2. Clone it locally:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/datasync-kvm-agent.git
-   cd datasync-kvm-agent
-Paste the above content into a file named README.md.
-
-(Optional) Add your existing s3_sync.sh script as a bonus.
-
-Commit and push:
-
-bash
-git add README.md s3_sync.sh   # if you add the script
-git commit -m "Initial project: DataSync KVM agent on Linux Mint"
-git push origin main
-Your project is now live. Anyone can follow the README to replicate the setup from scratch.

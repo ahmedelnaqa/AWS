@@ -109,6 +109,12 @@ Click Begin Installation (the VM will boot immediately)
 
 #### 5. Find the agent’s IP address
 Once the VM boots, its console will show a menu. Look for the line:
+With prerequisite error:
+![AWS DataSync](1-AWS_Datasync_error.jpg)
+
+After solve the errors:
+![AWS DataSync](2-AWS_Datasync_ready.jpg)
+
 
 text
 Currently connected network adapters:
@@ -135,6 +141,8 @@ Click Get activation key
 Copy the key and paste it into the agent’s web interface
 
 Complete the activation; the agent will appear as Online in the console
+
+![AWS DataSync](3- AWSDataSyncConnected.jpg)
 
 #### 7. Share the local folder via NFS
 The agent VM cannot see your host’s files directly – it must access them over the network.
@@ -176,6 +184,8 @@ S3 bucket: your bucket name
 IAM role: let DataSync create a default role (or use an existing one with write permissions)
 
 Click Create location
+
+![AWS DataSync](4- AWSDataSynccreated.jpg)
 
 #### 9. Create and run a DataSync task
 Go to Tasks → Create task:
